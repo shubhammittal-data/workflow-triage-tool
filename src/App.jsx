@@ -3,21 +3,21 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 
 // Data
 const IOA_WORKFLOWS = [
-  "Policy Renewal Reminders to Clients",
-  "Certificate of Insurance Requests",
-  "Endorsement Processing Notifications",
-  "New Business Submission to Carriers",
-  "Claims Status Update Emails",
-  "Billing Discrepancy Reconciliation",
-  "AOR Letter Distribution",
-  "Carrier Quote Follow-ups",
-  "Client Onboarding Documentation Requests",
-  "Compliance/Licensing Renewal Alerts",
-  "Loss Run Requests",
-  "Audit Notification Processing",
-  "Internal Team Status Updates",
-  "Policy Cancellation/Reinstatement Notices",
-  "Producer Onboarding Coordination",
+  { name: "Policy Renewal Reminders to Clients", desc: "Emails sent 60-90 days before policy expiration to start the renewal process and collect updated client information." },
+  { name: "Certificate of Insurance Requests", desc: "Generating and sending proof-of-coverage documents when requested by clients, vendors, or third parties." },
+  { name: "Endorsement Processing Notifications", desc: "Communicating mid-term policy changes (vehicles, locations, limits) between clients, carriers, and internal teams." },
+  { name: "New Business Submission to Carriers", desc: "Packaging and sending client applications to multiple carriers for quotes, then managing follow-up questions." },
+  { name: "Claims Status Update Emails", desc: "Coordinating between clients and carriers/adjusters to relay claim progress, requests, and resolutions." },
+  { name: "Billing Discrepancy Reconciliation", desc: "Resolving mismatches between carrier invoices, system records, and client billing through multi-party email threads." },
+  { name: "AOR Letter Distribution", desc: "Sending signed Agent of Record letters to carriers when a client transfers their book of business to your brokerage." },
+  { name: "Carrier Quote Follow-ups", desc: "Tracking and chasing responses from carriers who have not replied to submission requests within expected timeframes." },
+  { name: "Client Onboarding Documentation Requests", desc: "Collecting required documents (applications, loss history, financials) from new clients through multiple rounds of follow-up." },
+  { name: "Compliance/Licensing Renewal Alerts", desc: "Tracking and notifying producers about upcoming license expirations and continuing education requirements by state." },
+  { name: "Loss Run Requests", desc: "Requesting claims history reports from current and prior carriers, each with different submission methods and response times." },
+  { name: "Audit Notification Processing", desc: "Coordinating annual policy audits between carriers and clients, including document collection and dispute resolution." },
+  { name: "Internal Team Status Updates", desc: "Keeping producers, managers, and support teams informed about account activity, renewals, and open items via email." },
+  { name: "Policy Cancellation/Reinstatement Notices", desc: "Urgently communicating cancellation threats (usually for non-payment) and coordinating reinstatement with carriers and clients." },
+  { name: "Producer Onboarding Coordination", desc: "Managing new hire setup across HR, licensing, IT, carrier appointments, and training through parallel email threads." },
 ];
 
 const SCORING_SECTIONS = [
@@ -386,9 +386,9 @@ function ContextScreen({ onNext, onBack }) {
 function WorkflowSelector({ onNext, onBack }) {
   const [selected, setSelected] = useState(new Set());
 
-  const toggle = (w) => {
+  const toggle = (name) => {
     const s = new Set(selected);
-    s.has(w) ? s.delete(w) : s.add(w);
+    s.has(name) ? s.delete(name) : s.add(name);
     setSelected(s);
   };
 
@@ -403,27 +403,30 @@ function WorkflowSelector({ onNext, onBack }) {
           <p style={{ color: "#6B7280", fontSize: 15, marginTop: 8 }}>Choose the email-dependent workflows relevant to your team.</p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {IOA_WORKFLOWS.map((w) => {
-            const active = selected.has(w);
+            const active = selected.has(w.name);
             return (
               <div
-                key={w}
-                onClick={() => toggle(w)}
+                key={w.name}
+                onClick={() => toggle(w.name)}
                 style={{
                   background: active ? "rgba(27,58,107,0.07)" : CARD,
                   border: `2px solid ${active ? NAVY : "#E5E7EB"}`,
                   borderRadius: 10, padding: "14px 16px", cursor: "pointer",
-                  display: "flex", alignItems: "center", gap: 12, transition: "all 0.15s",
+                  display: "flex", alignItems: "flex-start", gap: 12, transition: "all 0.15s",
                 }}
               >
                 <div style={{
                   width: 22, height: 22, borderRadius: 6, border: `2px solid ${active ? NAVY : "#CBD5E1"}`,
-                  background: active ? NAVY : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  background: active ? NAVY : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2,
                 }}>
                   {active && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
-                <span style={{ fontSize: 14, fontWeight: active ? 600 : 500, color: active ? NAVY : "#374151" }}>{w}</span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: active ? 600 : 500, color: active ? NAVY : "#374151" }}>{w.name}</div>
+                  <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 3, lineHeight: 1.5 }}>{w.desc}</div>
+                </div>
               </div>
             );
           })}
