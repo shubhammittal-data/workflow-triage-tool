@@ -69,7 +69,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](https://workflow-triage-tool.netlify.app/) in your browser.
+Open [https://workflow-triage-tool.netlify.app/](https://workflow-triage-tool.netlify.app/) in your browser.
 
 ---
 
